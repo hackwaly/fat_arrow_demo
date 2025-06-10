@@ -1,0 +1,3 @@
+```
+dune exec ./main.bc
+```

@@ -13,15 +13,29 @@
 expr_eof:
   | expr EOF {}
 
-expr:
+gen_expr(atom_expr):
   | atom_expr {}
   | ID "=>" expr { print_endline "arrow 1" }
   | "(" ") =>" expr { print_endline "arrow 2" }
-  | "(" expr ") =>" expr { print_endline "arrow 3" }
-  | "(" expr "," separated_nonempty_list(",", expr) ") =>" expr { print_endline "arrow 4" }
+  | "(" ID ") =>" expr { print_endline "arrow 3" }
+  | "(" ID "," separated_nonempty_list(",", ID) ") =>" expr { print_endline "arrow 4" }
+
+expr:
+  | gen_expr(atom_expr) {}
+
+expr_no_id:
+  | gen_expr(atom_expr_no_id) {}
 
 atom_expr:
   | ID {}
+  | paren_expr {}
+
+atom_expr_no_id:
+  | paren_expr {}
+
+paren_expr:
   | "(" ")" {}
-  | "(" expr ")" {}
-  | "(" expr "," separated_nonempty_list(",", expr) ")" {}
+  | "(" ID ")" {}
+  | "(" ID "," separated_nonempty_list(",", ID) ")" {}
+  | "(" expr_no_id ")" {}
+  | "(" expr_no_id "," separated_nonempty_list(",", expr_no_id) ")" {}
